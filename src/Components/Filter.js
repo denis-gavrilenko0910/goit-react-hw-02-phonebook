@@ -2,7 +2,7 @@ import React from 'react';
 // import styled from 'styled-components';
 import { Container } from '../Container/Container';
 import { ContactsList } from './ContactsList';
-import { ContactsItems } from './ContactsItems';
+// import { ContactsItems } from './ContactsItems';
 
 export class Filter extends React.Component {
   state = {
@@ -21,6 +21,8 @@ export class Filter extends React.Component {
   }
 
   render() {
+    console.log(this.state.contacts);
+    // const { id, name, number } = this.state.contacts;
     return (
       <Container>
         <input
@@ -32,11 +34,7 @@ export class Filter extends React.Component {
           onChange={this.handleChange}
         />
 
-        <ContactsList>
-          {this.contacts?.map(contact => {
-            return console.log(contact);
-          })}
-        </ContactsList>
+        <ContactsList contacts={this.state.contacts} />
       </Container>
     );
   }
