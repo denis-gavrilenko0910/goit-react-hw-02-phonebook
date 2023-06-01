@@ -1,16 +1,12 @@
 import { Component } from 'react';
-// import styled from 'styled-components';
 import { Container } from '../Container/Container';
 
 export class Filter extends Component {
-  state = {};
-
   handleChange = e => {
     this.props.addFilter(e.target.value);
   };
 
   render() {
-    console.log(this.props);
     return (
       <Container>
         <input

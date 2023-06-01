@@ -11,11 +11,26 @@ export class ContactForm extends Component {
 
   handleChange = e => {
     const { name } = e.target;
+
     this.setState({ [name]: e.target.value });
   };
 
   handleSubmit = e => {
     e.preventDefault();
+
+    if (this.state.name && this.state.number) {
+      const existingContact = this.state.сontacts?.find(
+        contact => contact.name === this.state.name,
+      );
+
+      console.log(existingContact);
+      if (existingContact) {
+        console.log(this.state.name);
+        alert('Контакт уже существует!');
+        return;
+      }
+    }
+
     if (this.state.name && this.state.number) {
       this.props.addContact(this.state.name, this.state.number);
       this.setState(PHONEBOOK_STATE);
