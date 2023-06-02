@@ -3,8 +3,7 @@ import { Filter } from './Components/Filter';
 import { ContactForm } from './Components/ContactForm';
 import { Section } from './Components/Section';
 import { ContactsList } from './Components/ContactsList';
-
-// const PHONEBOOK_STATE = {};
+import { nanoid } from 'nanoid';
 
 class App extends Component {
   state = {
@@ -17,18 +16,33 @@ class App extends Component {
     filter: '',
   };
 
-  addContact = (name, number) => {
-    const newContact = {
-      id: `${Date()}`,
-      name,
-      number,
-    };
+  onSubmitHandler = name => {
+    const { contacts } = this.state;
+    if (contacts.find(el => el.name.includes(name.name))) {
+      console.log('exists');
+      return alert('the contact is already exists!');
+    }
 
-    this.setState(prev => {
-      return {
-        ...prev,
-        contacts: [...prev.contacts, newContact],
-      };
+    this.setState(prevState => ({
+      contacts: [
+        { name: name.name, id: nanoid(), number: name.number },
+        ...prevState.contacts,
+      ],
+    }));
+  };
+
+  handleFilterName = e => {
+    this.setState({
+      filter: e.currentTarget.value,
+    });
+  };
+
+  setFilteredContacts = () => {
+    const { filter, contacts } = this.state;
+    const contactNameToLowerCase = filter.toLowerCase();
+
+    return contacts.filter(contact => {
+      return contact.name.toLocaleLowerCase().includes(contactNameToLowerCase);
     });
   };
 
@@ -38,39 +52,16 @@ class App extends Component {
     }));
   };
 
-  addFilter = value => {
-    this.setState(prev => {
-      return {
-        ...prev,
-        filter: value,
-      };
-    });
-  };
-
-  setFilteredContacts = () => {
-    const filteredContacts = this.state.contacts.filter(contact => {
-      if (
-        contact.name
-          .toLocaleLowerCase()
-          .includes(this.state.filter.toLocaleLowerCase())
-      ) {
-        return contact;
-      }
-      return null;
-    });
-    return filteredContacts;
-  };
-
   render() {
+    const { filter } = this.state;
+    const filteredContacts = this.setFilteredContacts();
+
     return (
       <Section>
-        <ContactForm
-          addContact={this.addContact}
-          contacts={this.state.contacts}
-        />
-        <Filter filter={this.state.filter} addFilter={this.addFilter} />
+        <ContactForm onSubmit={this.onSubmitHandler} />
+        <Filter filter={filter} addFilter={this.handleFilterName} />
         <ContactsList
-          contacts={this.setFilteredContacts()}
+          contacts={filteredContacts}
           onDeleteContact={this.deleteContact}
         />
       </Section>

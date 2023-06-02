@@ -9,61 +9,47 @@ const PHONEBOOK_STATE = {
 export class ContactForm extends Component {
   state = { ...PHONEBOOK_STATE };
 
-  handleChange = e => {
-    const { name } = e.target;
-
-    this.setState({ [name]: e.target.value });
+  handleChangeName = e => {
+    this.setState({ name: e.target.value });
+  };
+  handleChangeNumber = e => {
+    this.setState({ number: e.target.value });
   };
 
   handleSubmit = e => {
     e.preventDefault();
-
-    if (this.state.name && this.state.number) {
-      const existingContact = this.state.сontacts?.find(
-        contact => contact.name === this.state.name,
-      );
-
-      console.log(existingContact);
-      if (existingContact) {
-        console.log(this.state.name);
-        alert('Контакт уже существует!');
-        return;
-      }
-    }
-
-    if (this.state.name && this.state.number) {
-      this.props.addContact(this.state.name, this.state.number);
-      this.setState(PHONEBOOK_STATE);
-    } //add some notification that input should containe smth
+    this.props.onSubmit({ ...this.state });
+    this.setState(PHONEBOOK_STATE);
   };
 
   render() {
+    const { name, number } = this.state;
     return (
       <Container>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <input
             id="name"
-            name="name"
+            name={name}
             type="text"
-            value={this.state.name}
+            value={name}
             placeholder="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
-            onChange={this.handleChange}
+            onChange={this.handleChangeName}
           />
           <input
             id="number"
-            name="number"
+            name={number}
             type="tel"
-            value={this.state.number}
+            value={number}
             placeholder="number"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
-            onChange={this.handleChange}
+            onChange={this.handleChangeNumber}
           />
-          <button onClick={this.handleSubmit}>Add Contact</button>
+          <button onSubmit={this.onHandleSubmit}>Add Contact</button>
         </form>
       </Container>
     );
