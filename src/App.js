@@ -19,7 +19,6 @@ class App extends Component {
   onSubmitHandler = name => {
     const { contacts } = this.state;
     if (contacts.find(el => el.name.includes(name.name))) {
-      console.log('exists');
       return alert('the contact is already exists!');
     }
 
