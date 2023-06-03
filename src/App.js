@@ -16,17 +16,15 @@ class App extends Component {
     filter: '',
   };
 
-  onSubmitHandler = name => {
+  onSubmitHandler = data => {
     const { contacts } = this.state;
-    if (contacts.find(el => el.name.includes(name.name))) {
+    const checkIdentity = data.name.toLocaleLowerCase();
+    if (contacts.find(el => el.name.toLocaleLowerCase() === checkIdentity)) {
       return alert('the contact is already exists!');
     }
 
     this.setState(prevState => ({
-      contacts: [
-        { name: name.name, id: nanoid(), number: name.number },
-        ...prevState.contacts,
-      ],
+      contacts: [{ ...data, id: nanoid() }, ...prevState.contacts],
     }));
   };
 
